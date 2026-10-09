@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>OrdinaFile Online</title>
+<style>
+body{font:16px -apple-system,BlinkMacSystemFont,sans-serif;background:#f3f5fa;color:#202536;max-width:850px;margin:50px auto;padding:20px}
+section{background:white;border:1px solid #ddd;border-radius:16px;padding:24px;margin:20px 0}
+h1{font-size:38px}button{padding:13px 18px;border:0;border-radius:9px;background:#2459e0;color:white;font-weight:bold;cursor:pointer;margin:10px 5px 10px 0}
+#drop{border:2px dashed #aab7d2;border-radius:12px;padding:25px;text-align:center}
+li{margin:10px 0;overflow-wrap:anywhere}small{color:#687086}
+</style>
+</head>
+<body>
+<h1>📁 OrdinaFile</h1>
+<p>Organizza i tuoi file gratuitamente dal browser.</p>
+<section>
+<h2>1. Seleziona i file</h2>
+<div id="drop">Trascina qui i file oppure selezionali sotto.</div>
+<p><input id="files" type="file" multiple></p>
+<p><input id="folder" type="file" webkitdirectory multiple></p>
+<button id="clear">Svuota elenco</button>
+<p><small>I file vengono elaborati sul tuo dispositivo e non caricati su questo sito.</small></p>
+</section>
+<section>
+<h2>2. Anteprima</h2>
+<p id="status">Nessun file selezionato.</p>
+<ul id="list"></ul>
+<button id="download" disabled>Organizza e scarica ZIP</button>
+</section>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script>
+const $=id=>document.getElementById(id);
+let files=[];
+function category(name){
+ const ext=name.split('/').pop().split('.').pop().toLowerCase();
+ const groups={
+  Immagini:'jpg jpeg png gif webp heic svg bmp tif tiff',
+  Documenti:'pdf doc docx txt rtf odt pages',
+  Fogli:'xls xlsx csv ods numbers',
+  Presentazioni:'ppt pptx odp key',
+  Video:'mp4 mov avi mkv webm m4v',
+  Audio:'mp3 wav m4a aac flac ogg',
+  Archivi:'zip rar 7z tar gz',
+  Codice:'js ts py html css json xml sh sql'
+ };
+ for(const k in groups)if(groups[k].split(' ').includes(ext))return k;
+ return 'Altri file';
+}
+function add(list){
+ for(const f of list){
+  if(!files.some(x=>x.name===f.name&&x.size===f.size&&x.lastModified===f.lastModified))files.push(f);
+ }
+ render();
+}
+function render(){
+ $('status').textContent=files.length+' file selezionati';
+ $('list').replaceChildren();
+ files.forEach(f=>{
+  const li=document.createElement('li');
+  li.textContent=category(f.name)+' — '+f.name+' ('+(f.size/1024).toFixed(1)+' KB)';
+  $('list').append(li);
+ });
+ $('download').disabled=!files.length;
+}
+$('files').onchange=e=>add(e.target.files);
+$('folder').onchange=e=>add(e.target.files);
+$('clear').onclick=()=>{files=[];$('files').value='';$('folder').value='';render()};
+const drop=$('drop');
+drop.ondragover=e=>{e.preventDefault();drop.style.background='#eaf0ff'};
+drop.ondragleave=()=>drop.style.background='';
+drop.ondrop=e=>{e.preventDefault();drop.style.background='';add(e.dataTransfer.files)};
+$('download').onclick=async()=>{
+ const btn=$('download');
+ btn.disabled=true;btn.textContent='Creazione ZIP…';
+ try{
+  if(typeof JSZip==='undefined')throw Error('Libreria ZIP non disponibile: controlla Internet.');
+  const zip=new JSZip();
+  for(const f of files){
+   const name=f.name.split('/').pop().replace(/[<>:"\\|?*\x00-\x1f]/g,'_')||'file';
+   zip.folder(category(name)).file(name,f);
+  }
+  const blob=await zip.generateAsync({type:'blob'});
+  const url=URL.createObjectURL(blob),a=document.createElement('a');
+  a.href=url;a.download='OrdinaFile_organizzati.zip';a.click();
+  setTimeout(()=>URL.revokeObjectURL(url),3000);
+  btn.textContent='ZIP scaricato';
+ }catch(e){alert(e.message);btn.textContent='Organizza e scarica ZIP'}
+ finally{btn.disabled=!files.length}
+};
+</script>
+</body>
+</html>
