@@ -1,94 +1,55 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="it">
 <head>
-<meta charset="UTF-8">
+<meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>OrdinaFile Online</title>
+<title>OrdinaFile</title>
 <style>
-body{font:16px -apple-system,BlinkMacSystemFont,sans-serif;background:#f3f5fa;color:#202536;max-width:850px;margin:50px auto;padding:20px}
-section{background:white;border:1px solid #ddd;border-radius:16px;padding:24px;margin:20px 0}
-h1{font-size:38px}button{padding:13px 18px;border:0;border-radius:9px;background:#2459e0;color:white;font-weight:bold;cursor:pointer;margin:10px 5px 10px 0}
-#drop{border:2px dashed #aab7d2;border-radius:12px;padding:25px;text-align:center}
-li{margin:10px 0;overflow-wrap:anywhere}small{color:#687086}
+:root{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#20283a;background:#f4f6fa}
+*{box-sizing:border-box}body{margin:0}header{padding:22px 28px;background:#fff;border-bottom:1px solid #e4e8f0;display:flex;align-items:center;justify-content:space-between}h1{font-size:24px;margin:0}header p{margin:5px 0 0;color:#737d90;font-size:13px}.pill{background:#edf3ff;color:#315fba;padding:8px 12px;border-radius:20px;font-size:12px}
+main{display:grid;grid-template-columns:240px minmax(280px,1fr) minmax(300px,1.1fr);gap:16px;padding:18px;max-width:1500px;margin:auto}.panel{background:white;border:1px solid #e4e8f0;border-radius:14px;padding:18px;min-width:0}.panel h2{font-size:15px;margin:0 0 16px}.muted{color:#7c8597;font-size:12px;line-height:1.5}.nav{display:block;width:100%;text-align:left;border:0;background:#f4f6fa;padding:12px;border-radius:9px;margin:8px 0;color:#354057}.nav.active{background:#eaf0ff;color:#2859b7;font-weight:600}button,.pick{font:inherit;font-size:13px;border:1px solid #dce2ec;background:#fff;border-radius:8px;padding:10px 12px;cursor:pointer}button.primary{background:#315fba;color:white;border-color:#315fba}.wide{width:100%}.drop{border:1.5px dashed #c8d3e7;border-radius:12px;padding:22px 12px;text-align:center;background:#fafbfe;margin:12px 0}.drop strong{display:block;font-size:13px;margin-bottom:6px}.drop input{width:100%;font-size:11px;margin-top:12px}.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}.search{width:100%;padding:11px;border:1px solid #dce2ec;border-radius:8px;font:inherit;margin-bottom:12px}.file{padding:12px 8px;border-bottom:1px solid #edf0f5;cursor:pointer;overflow-wrap:anywhere}.file:hover,.file.selected{background:#eef3ff;border-radius:7px}.file strong{font-size:13px}.file small{display:block;color:#858da0;margin-top:5px}.empty{padding:24px 8px;color:#858da0;text-align:center;font-size:13px}.editor{width:100%;min-height:260px;resize:vertical;border:1px solid #dce2ec;border-radius:9px;padding:12px;font:13px ui-monospace,SFMono-Regular,monospace}.path{font-size:11px;color:#7c8597;overflow-wrap:anywhere;margin-bottom:10px}#status{font-size:12px;color:#58657a;min-height:36px;margin-top:14px}.result{font-size:12px;padding:8px 0;border-bottom:1px solid #edf0f5;overflow-wrap:anywhere}
+@media(max-width:900px){main{grid-template-columns:1fr}.panel{width:100%}header{padding:18px}}
 </style>
 </head>
 <body>
-<h1>📁 OrdinaFile</h1>
-<p>Organizza i tuoi file gratuitamente dal browser.</p>
-<section>
-<h2>1. Seleziona i file</h2>
-<div id="drop">Trascina qui i file oppure selezionali sotto.</div>
-<p><input id="files" type="file" multiple></p>
-<p><input id="folder" type="file" webkitdirectory multiple></p>
-<button id="clear">Svuota elenco</button>
-<p><small>I file vengono elaborati sul tuo dispositivo e non caricati su questo sito.</small></p>
+<header><div><h1>📁 OrdinaFile</h1><p>Uno spazio semplice per selezionare, consultare e organizzare i tuoi file.</p></div><span class="pill">Elaborazione nel browser</span></header>
+<main>
+<aside class="panel">
+<h2>Area di lavoro</h2>
+<button class="nav active" data-view="files">▦　File selezionati</button>
+<button class="nav" data-view="search">⌕　Cerca file</button>
+<button class="nav" data-view="archive">▤　Archivio sessione</button>
+<div style="height:18px"></div><h2>Seleziona file</h2>
+<div class="drop" id="drop"><strong>Trascina qui i file</strong><span class="muted">oppure selezionali dal Mac</span><input id="pickFiles" type="file" multiple><input id="pickFolder" type="file" webkitdirectory multiple></div>
+<p class="muted">I file vengono elaborati nel browser e non caricati su questo sito. Per motivi di sicurezza devi selezionare tu i file o la cartella.</p>
+<button id="clear" class="wide">Svuota elenco</button>
+</aside>
+<section class="panel">
+<h2 id="listTitle">File selezionati</h2>
+<input id="search" class="search" placeholder="Cerca per nome...">
+<div class="toolbar"><button id="all">Seleziona tutto</button><button id="download" class="primary">Scarica elenco</button></div>
+<div id="list"><div class="empty">Seleziona file o una cartella per iniziare.</div></div>
+<div id="status">Pronto.</div>
 </section>
-<section>
-<h2>2. Anteprima</h2>
-<p id="status">Nessun file selezionato.</p>
-<ul id="list"></ul>
-<button id="download" disabled>Organizza e scarica ZIP</button>
+<section class="panel">
+<h2>Anteprima e dettagli</h2>
+<div id="details" class="empty">Seleziona un file nell'elenco per visualizzarne i dettagli.</div>
+<div id="editorWrap" hidden><div id="editPath" class="path"></div><textarea id="editor" class="editor" aria-label="Contenuto del file"></textarea><div class="toolbar" style="margin-top:10px"><button id="saveText" class="primary">Scarica testo modificato</button></div><p class="muted">Il browser non può sovrascrivere direttamente il file originale: puoi scaricare la versione modificata.</p></div>
+<div style="height:16px"></div><h2>Riepilogo</h2><div id="summary" class="muted">Nessun file selezionato.</div>
 </section>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+</main>
 <script>
 const $=id=>document.getElementById(id);
-let files=[];
-function category(name){
- const ext=name.split('/').pop().split('.').pop().toLowerCase();
- const groups={
-  Immagini:'jpg jpeg png gif webp heic svg bmp tif tiff',
-  Documenti:'pdf doc docx txt rtf odt pages',
-  Fogli:'xls xlsx csv ods numbers',
-  Presentazioni:'ppt pptx odp key',
-  Video:'mp4 mov avi mkv webm m4v',
-  Audio:'mp3 wav m4a aac flac ogg',
-  Archivi:'zip rar 7z tar gz',
-  Codice:'js ts py html css json xml sh sql'
- };
- for(const k in groups)if(groups[k].split(' ').includes(ext))return k;
- return 'Altri file';
-}
-function add(list){
- for(const f of list){
-  if(!files.some(x=>x.name===f.name&&x.size===f.size&&x.lastModified===f.lastModified))files.push(f);
- }
- render();
-}
-function render(){
- $('status').textContent=files.length+' file selezionati';
- $('list').replaceChildren();
- files.forEach(f=>{
-  const li=document.createElement('li');
-  li.textContent=category(f.name)+' — '+f.name+' ('+(f.size/1024).toFixed(1)+' KB)';
-  $('list').append(li);
- });
- $('download').disabled=!files.length;
-}
-$('files').onchange=e=>add(e.target.files);
-$('folder').onchange=e=>add(e.target.files);
-$('clear').onclick=()=>{files=[];$('files').value='';$('folder').value='';render()};
-const drop=$('drop');
-drop.ondragover=e=>{e.preventDefault();drop.style.background='#eaf0ff'};
-drop.ondragleave=()=>drop.style.background='';
-drop.ondrop=e=>{e.preventDefault();drop.style.background='';add(e.dataTransfer.files)};
-$('download').onclick=async()=>{
- const btn=$('download');
- btn.disabled=true;btn.textContent='Creazione ZIP…';
- try{
-  if(typeof JSZip==='undefined')throw Error('Libreria ZIP non disponibile: controlla Internet.');
-  const zip=new JSZip();
-  for(const f of files){
-   const name=f.name.split('/').pop().replace(/[<>:"\\|?*\x00-\x1f]/g,'_')||'file';
-   zip.folder(category(name)).file(name,f);
-  }
-  const blob=await zip.generateAsync({type:'blob'});
-  const url=URL.createObjectURL(blob),a=document.createElement('a');
-  a.href=url;a.download='OrdinaFile_organizzati.zip';a.click();
-  setTimeout(()=>URL.revokeObjectURL(url),3000);
-  btn.textContent='ZIP scaricato';
- }catch(e){alert(e.message);btn.textContent='Organizza e scarica ZIP'}
- finally{btn.disabled=!files.length}
-};
+let files=[],selected=-1,archive=[];
+function say(s){$("status").textContent=s}
+function kind(name){let e=name.split(".").pop().toLowerCase();for(let [k,v] of Object.entries({Immagini:"jpg jpeg png gif webp heic svg bmp tif tiff",Documenti:"pdf doc docx txt rtf odt pages",Fogli:"xls xlsx csv ods numbers",Presentazioni:"ppt pptx odp key",Video:"mp4 mov avi mkv webm m4v",Audio:"mp3 wav m4a aac flac ogg",Archivi:"zip rar 7z tar gz"}))if(v.split(" ").includes(e))return k;return "Altri file"}
+function size(n){if(n<1024)return n+" B";if(n<1048576)return (n/1024).toFixed(1)+" KB";return (n/1048576).toFixed(2)+" MB"}
+function render(){let q=$("search").value.toLowerCase(),items=files.map((f,i)=>({f,i})).filter(x=>x.f.name.toLowerCase().includes(q));$("list").innerHTML="";if(!items.length)$("list").innerHTML='<div class="empty">Nessun file da mostrare.</div>';for(let {f,i} of items){let d=document.createElement("div");d.className="file"+(selected===i?" selected":"");let b=document.createElement("strong");b.textContent=(selected===i?"● ":"📄 ")+f.name;let sm=document.createElement("small");sm.textContent=kind(f.name)+" · "+size(f.size)+(f.webkitRelativePath?" · "+f.webkitRelativePath:"");d.append(b,sm);d.onclick=()=>choose(i);$("list").append(d)}$("summary").textContent=files.length+" file · "+size(files.reduce((s,f)=>s+f.size,0))+" · "+new Set(files.map(f=>kind(f.name))).size+" categorie";$("download").disabled=!files.length}
+function add(list){let seen=new Set(files.map(f=>f.name+"|"+f.size+"|"+f.lastModified));let n=0;for(let f of list){let k=f.name+"|"+f.size+"|"+f.lastModified;if(!seen.has(k)){files.push(f);seen.add(k);n++}}archive=[...new Set([...archive,...files.map(f=>f.name)])];render();say(n+" nuovi file aggiunti.")}
+function choose(i){selected=i;let f=files[i];render();$("editorWrap").hidden=true;$("details").hidden=false;$("details").className="";$("details").innerHTML="";for(let [k,v] of [["Nome",f.name],["Categoria",kind(f.name)],["Dimensione",size(f.size)],["Tipo",f.type||"Non specificato"],["Ultima modifica",new Date(f.lastModified).toLocaleString("it-IT")],["Percorso relativo",f.webkitRelativePath||"File selezionato singolarmente"]]){let d=document.createElement("div");d.className="result";let b=document.createElement("strong");b.textContent=k+": ";d.append(b,document.createTextNode(v));$("details").append(d)}if(/\.(txt|md|csv|json|html|css|js|xml|log|rtf)$/i.test(f.name)&&f.size<1e6){f.text().then(t=>{$("editorWrap").hidden=false;$("details").hidden=true;$("editPath").textContent=f.name;$("editor").value=t})}say("Selezionato: "+f.name)}
+$("pickFiles").onchange=e=>add(e.target.files);$("pickFolder").onchange=e=>add(e.target.files);$("clear").onclick=()=>{files=[];selected=-1;render();$("details").hidden=false;$("details").className="empty";$("details").textContent="Seleziona un file nell'elenco per visualizzarne i dettagli.";$("editorWrap").hidden=true;say("Elenco svuotato.")};$("search").oninput=render;$("all").onclick=()=>say(files.length+" file presenti nell'elenco.");$("saveText").onclick=()=>{if(selected<0)return;let f=files[selected],blob=new Blob([$("editor").value],{type:"text/plain;charset=utf-8"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download=f.name;a.click();URL.revokeObjectURL(url);say("Versione modificata scaricata.")};$("download").onclick=()=>{let blob=new Blob(["OrdinaFile — elenco file\n\n"+files.map(f=>f.name+"\t"+kind(f.name)+"\t"+size(f.size)+"\t"+(f.webkitRelativePath||"")).join("\n")],{type:"text/plain;charset=utf-8"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="ordinafile-elenco.txt";a.click();URL.revokeObjectURL(url);say("Elenco scaricato.")};
+$("drop").ondragover=e=>{e.preventDefault();$("drop").style.background="#eef3ff"};$("drop").ondragleave=()=>{$("drop").style.background="#fafbfe"};$("drop").ondrop=e=>{e.preventDefault();$("drop").style.background="#fafbfe";add(e.dataTransfer.files)};
+document.querySelectorAll(".nav").forEach(b=>b.onclick=()=>{document.querySelectorAll(".nav").forEach(x=>x.classList.remove("active"));b.classList.add("active");let v=b.dataset.view;if(v==="archive"){ $("listTitle").textContent="Archivio sessione";$("search").placeholder="Filtra archivio";let old=$("search").value;$("list").innerHTML="";archive.forEach(n=>{let d=document.createElement("div");d.className="result";d.textContent=n;$("list").append(d)});say("Archivio temporaneo della sessione: "+archive.length+" nomi.");}else{$("listTitle").textContent=v==="search"?"Cerca file":"File selezionati";render();if(v==="search")$("search").focus()}});
 </script>
 </body>
 </html>
