@@ -5,20 +5,55 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>OrdinaFile</title>
 <style>
-:root{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#20283a;background:#f4f6fa}
-*{box-sizing:border-box}body{margin:0}header{padding:22px 28px;background:#fff;border-bottom:1px solid #e4e8f0;display:flex;align-items:center;justify-content:space-between}h1{font-size:24px;margin:0}header p{margin:5px 0 0;color:#737d90;font-size:13px}.pill{background:#edf3ff;color:#315fba;padding:8px 12px;border-radius:20px;font-size:12px}
-main{display:grid;grid-template-columns:240px minmax(280px,1fr) minmax(300px,1.1fr);gap:16px;padding:18px;max-width:1500px;margin:auto}.panel{background:white;border:1px solid #e4e8f0;border-radius:14px;padding:18px;min-width:0}.panel h2{font-size:15px;margin:0 0 16px}.muted{color:#7c8597;font-size:12px;line-height:1.5}.nav{display:block;width:100%;text-align:left;border:0;background:#f4f6fa;padding:12px;border-radius:9px;margin:8px 0;color:#354057}.nav.active{background:#eaf0ff;color:#2859b7;font-weight:600}button,.pick{font:inherit;font-size:13px;border:1px solid #dce2ec;background:#fff;border-radius:8px;padding:10px 12px;cursor:pointer}button.primary{background:#315fba;color:white;border-color:#315fba}.wide{width:100%}.drop{border:1.5px dashed #c8d3e7;border-radius:12px;padding:22px 12px;text-align:center;background:#fafbfe;margin:12px 0}.drop strong{display:block;font-size:13px;margin-bottom:6px}.drop input{width:100%;font-size:11px;margin-top:12px}.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}.search{width:100%;padding:11px;border:1px solid #dce2ec;border-radius:8px;font:inherit;margin-bottom:12px}.file{padding:12px 8px;border-bottom:1px solid #edf0f5;cursor:pointer;overflow-wrap:anywhere}.file:hover,.file.selected{background:#eef3ff;border-radius:7px}.file strong{font-size:13px}.file small{display:block;color:#858da0;margin-top:5px}.empty{padding:24px 8px;color:#858da0;text-align:center;font-size:13px}.editor{width:100%;min-height:260px;resize:vertical;border:1px solid #dce2ec;border-radius:9px;padding:12px;font:13px ui-monospace,SFMono-Regular,monospace}.path{font-size:11px;color:#7c8597;overflow-wrap:anywhere;margin-bottom:10px}#status{font-size:12px;color:#58657a;min-height:36px;margin-top:14px}.result{font-size:12px;padding:8px 0;border-bottom:1px solid #edf0f5;overflow-wrap:anywhere}
-@media(max-width:900px){main{grid-template-columns:1fr}.panel{width:100%}header{padding:18px}}
+:root{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#202b3c;background:#f5f7fb}
+*{box-sizing:border-box}body{margin:0}header{padding:17px 28px;background:#fff;border-bottom:1px solid #e1e6ee;display:flex;align-items:center}.topbar{background:#111;color:#fff;border-bottom:1px solid #333;}.brand{display:flex;align-items:center;gap:13px}.brand-mark{background:#fff;color:#111;width:38px;height:38px;display:flex;align-items:center;justify-content:center;background:#244f91;color:#fff;border-radius:10px;font-size:20px;font-weight:650}header h1{font-size:21px;letter-spacing:-.5px;font-weight:650}header p{margin:4px 0 0;color:#778195;font-size:12px}h1{font-size:24px;margin:0}header p{margin:5px 0 0;color:#737d90;font-size:13px}.pill{background:#edf3ff;color:#315fba;padding:8px 12px;border-radius:20px;font-size:12px}
+main{display:grid;grid-template-columns:240px minmax(280px,1fr) minmax(300px,1.1fr);gap:16px;padding:18px;max-width:1500px;margin:auto}.panel{background:white;border:1px solid #e4e8f0;border-radius:12px;padding:20px;min-width:0;box-shadow:0 2px 8px #172b4d08}.panel h2{font-size:15px;margin:0 0 16px}.muted{color:#7c8597;font-size:12px;line-height:1.5}.nav{display:block;width:100%;text-align:left;border:0;background:#f4f6fa;padding:12px;border-radius:9px;margin:8px 0;color:#354057}.nav.active{background:#eaf0f8;color:#244f91;font-weight:600}button,.pick{font:inherit;font-size:13px;border:1px solid #dce2ec;background:#fff;border-radius:8px;padding:10px 12px;cursor:pointer}button.primary{background:#244f91;color:white;border-color:#244f91}.wide{width:100%}.drop{border:1.5px dashed #c8d3e7;border-radius:12px;padding:22px 12px;text-align:center;background:#fafbfe;margin:12px 0}.drop strong{display:block;font-size:13px;margin-bottom:6px}.drop input{width:100%;font-size:11px;margin-top:12px}.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}.search{width:100%;padding:11px;border:1px solid #dce2ec;border-radius:8px;font:inherit;margin-bottom:12px}.file{padding:12px 8px;border-bottom:1px solid #edf0f5;cursor:pointer;overflow-wrap:anywhere}.file:hover,.file.selected{background:#eef3ff;border-radius:7px}.file strong{font-size:13px}.file small{display:block;color:#858da0;margin-top:5px}.empty{padding:24px 8px;color:#858da0;text-align:center;font-size:13px}.editor{width:100%;min-height:260px;resize:vertical;border:1px solid #dce2ec;border-radius:9px;padding:12px;font:13px ui-monospace,SFMono-Regular,monospace}.path{font-size:11px;color:#7c8597;overflow-wrap:anywhere;margin-bottom:10px}#status{font-size:12px;color:#58657a;min-height:36px;margin-top:14px}.result{font-size:12px;padding:8px 0;border-bottom:1px solid #edf0f5;overflow-wrap:anywhere}
+@media(max-width:900px){main{grid-template-columns:1fr}.panel{width:100%}header{padding:16px 18px}}
+
+/* Pulsante Scarica elenco */
+button, .btn, a.button {
+  color: #fff;
+}
+
+
+#sortFiles{padding:9px 10px;border:1px solid #d5d9e2;border-radius:8px;background:#fff;color:#111;max-width:100%}
+.toolbar label{font-size:13px;font-weight:600}
+@media(max-width:700px){.toolbar{flex-wrap:wrap}#sortFiles{width:100%}}
 </style>
+
+<style>
+.logo-folder {
+  width: 52px;
+  height: 52px;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  flex-shrink: 0;
+}
+.logo-folder svg {
+  width: 34px;
+  height: 34px;
+  display: block;
+}
+</style>
+
 </head>
 <body>
-<header><div><h1>📁 OrdinaFile</h1><p>Uno spazio semplice per selezionare, consultare e organizzare i tuoi file.</p></div><span class="pill">Elaborazione nel browser</span></header>
+<header class="topbar">
+<div class="logo-folder" aria-label="Logo OrdinaFile">
+<svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+<path d="M5 12a4 4 0 0 1 4-4h11l5 6h14a4 4 0 0 1 4 4v18a4 4 0 0 1-4 4H9a4 4 0 0 1-4-4V12z" fill="#000"/>
+</svg>
+</div>
+<div class="brand"><div><h1>OrdinaFile</h1><p>Gestione e organizzazione dei file</p></div></div></header>
 <main>
 <aside class="panel">
 <h2>Area di lavoro</h2>
-<button class="nav active" data-view="files">▦　File selezionati</button>
-<button class="nav" data-view="search">⌕　Cerca file</button>
-<button class="nav" data-view="archive">▤　Archivio sessione</button>
+<button class="nav active" data-view="files">File selezionati</button>
+<button class="nav" data-view="search">Cerca file</button>
+<button class="nav" data-view="archive">Archivio sessione</button>
 <div style="height:18px"></div><h2>Seleziona file</h2>
 <div class="drop" id="drop"><strong>Trascina qui i file</strong><span class="muted">oppure selezionali dal Mac</span><input id="pickFiles" type="file" multiple><input id="pickFolder" type="file" webkitdirectory multiple></div>
 <p class="muted">I file vengono elaborati nel browser e non caricati su questo sito. Per motivi di sicurezza devi selezionare tu i file o la cartella.</p>
@@ -27,7 +62,16 @@ main{display:grid;grid-template-columns:240px minmax(280px,1fr) minmax(300px,1.1
 <section class="panel">
 <h2 id="listTitle">File selezionati</h2>
 <input id="search" class="search" placeholder="Cerca per nome...">
-<div class="toolbar"><button id="all">Seleziona tutto</button><button id="download" class="primary">Scarica elenco</button></div>
+<div class="toolbar">
+<label for="sortFiles">Ordina per</label>
+<select id="sortFiles">
+<option value="name">Nome A–Z</option>
+<option value="size">Dimensione: maggiore prima</option>
+<option value="date">Data: più recente prima</option>
+</select>
+<button id="all">Seleziona tutto</button>
+<button id="download" class="primary">Scarica elenco</button>
+</div>
 <div id="list"><div class="empty">Seleziona file o una cartella per iniziare.</div></div>
 <div id="status">Pronto.</div>
 </section>
@@ -44,12 +88,24 @@ let files=[],selected=-1,archive=[];
 function say(s){$("status").textContent=s}
 function kind(name){let e=name.split(".").pop().toLowerCase();for(let [k,v] of Object.entries({Immagini:"jpg jpeg png gif webp heic svg bmp tif tiff",Documenti:"pdf doc docx txt rtf odt pages",Fogli:"xls xlsx csv ods numbers",Presentazioni:"ppt pptx odp key",Video:"mp4 mov avi mkv webm m4v",Audio:"mp3 wav m4a aac flac ogg",Archivi:"zip rar 7z tar gz"}))if(v.split(" ").includes(e))return k;return "Altri file"}
 function size(n){if(n<1024)return n+" B";if(n<1048576)return (n/1024).toFixed(1)+" KB";return (n/1048576).toFixed(2)+" MB"}
-function render(){let q=$("search").value.toLowerCase(),items=files.map((f,i)=>({f,i})).filter(x=>x.f.name.toLowerCase().includes(q));$("list").innerHTML="";if(!items.length)$("list").innerHTML='<div class="empty">Nessun file da mostrare.</div>';for(let {f,i} of items){let d=document.createElement("div");d.className="file"+(selected===i?" selected":"");let b=document.createElement("strong");b.textContent=(selected===i?"● ":"📄 ")+f.name;let sm=document.createElement("small");sm.textContent=kind(f.name)+" · "+size(f.size)+(f.webkitRelativePath?" · "+f.webkitRelativePath:"");d.append(b,sm);d.onclick=()=>choose(i);$("list").append(d)}$("summary").textContent=files.length+" file · "+size(files.reduce((s,f)=>s+f.size,0))+" · "+new Set(files.map(f=>kind(f.name))).size+" categorie";$("download").disabled=!files.length}
+function render(){let q=$("search").value.toLowerCase(),items=files.map((f,i)=>({f,i})).filter(x=>x.f.name.toLowerCase().includes(q));let mode=$("sortFiles").value;items.sort((a,b)=>mode==="size"?b.f.size-a.f.size:mode==="date"?b.f.lastModified-a.f.lastModified:a.f.name.localeCompare(b.f.name,"it",{sensitivity:"base"}));$("list").innerHTML="";if(!items.length)$("list").innerHTML='<div class="empty">Nessun file da mostrare.</div>';for(let {f,i} of items){let d=document.createElement("div");d.className="file"+(selected===i?" selected":"");let b=document.createElement("strong");b.textContent=(selected===i?"● ":"📄 ")+f.name;let sm=document.createElement("small");sm.textContent=kind(f.name)+" · "+size(f.size)+(f.webkitRelativePath?" · "+f.webkitRelativePath:"");d.append(b,sm);d.onclick=()=>choose(i);$("list").append(d)}$("summary").textContent=files.length+" file · "+size(files.reduce((s,f)=>s+f.size,0))+" · "+new Set(files.map(f=>kind(f.name))).size+" categorie";$("download").disabled=!files.length}
 function add(list){let seen=new Set(files.map(f=>f.name+"|"+f.size+"|"+f.lastModified));let n=0;for(let f of list){let k=f.name+"|"+f.size+"|"+f.lastModified;if(!seen.has(k)){files.push(f);seen.add(k);n++}}archive=[...new Set([...archive,...files.map(f=>f.name)])];render();say(n+" nuovi file aggiunti.")}
 function choose(i){selected=i;let f=files[i];render();$("editorWrap").hidden=true;$("details").hidden=false;$("details").className="";$("details").innerHTML="";for(let [k,v] of [["Nome",f.name],["Categoria",kind(f.name)],["Dimensione",size(f.size)],["Tipo",f.type||"Non specificato"],["Ultima modifica",new Date(f.lastModified).toLocaleString("it-IT")],["Percorso relativo",f.webkitRelativePath||"File selezionato singolarmente"]]){let d=document.createElement("div");d.className="result";let b=document.createElement("strong");b.textContent=k+": ";d.append(b,document.createTextNode(v));$("details").append(d)}if(/\.(txt|md|csv|json|html|css|js|xml|log|rtf)$/i.test(f.name)&&f.size<1e6){f.text().then(t=>{$("editorWrap").hidden=false;$("details").hidden=true;$("editPath").textContent=f.name;$("editor").value=t})}say("Selezionato: "+f.name)}
-$("pickFiles").onchange=e=>add(e.target.files);$("pickFolder").onchange=e=>add(e.target.files);$("clear").onclick=()=>{files=[];selected=-1;render();$("details").hidden=false;$("details").className="empty";$("details").textContent="Seleziona un file nell'elenco per visualizzarne i dettagli.";$("editorWrap").hidden=true;say("Elenco svuotato.")};$("search").oninput=render;$("all").onclick=()=>say(files.length+" file presenti nell'elenco.");$("saveText").onclick=()=>{if(selected<0)return;let f=files[selected],blob=new Blob([$("editor").value],{type:"text/plain;charset=utf-8"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download=f.name;a.click();URL.revokeObjectURL(url);say("Versione modificata scaricata.")};$("download").onclick=()=>{let blob=new Blob(["OrdinaFile — elenco file\n\n"+files.map(f=>f.name+"\t"+kind(f.name)+"\t"+size(f.size)+"\t"+(f.webkitRelativePath||"")).join("\n")],{type:"text/plain;charset=utf-8"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="ordinafile-elenco.txt";a.click();URL.revokeObjectURL(url);say("Elenco scaricato.")};
+$("pickFiles").onchange=e=>add(e.target.files);$("pickFolder").onchange=e=>add(e.target.files);$("clear").onclick=()=>{files=[];selected=-1;render();$("details").hidden=false;$("details").className="empty";$("details").textContent="Seleziona un file nell'elenco per visualizzarne i dettagli.";$("editorWrap").hidden=true;say("Elenco svuotato.")};$("search").oninput=render;$("sortFiles").onchange=render;$("all").onclick=()=>say(files.length+" file presenti nell'elenco.");$("saveText").onclick=()=>{if(selected<0)return;let f=files[selected],blob=new Blob([$("editor").value],{type:"text/plain;charset=utf-8"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download=f.name;a.click();URL.revokeObjectURL(url);say("Versione modificata scaricata.")};$("download").onclick=()=>{let blob=new Blob(["OrdinaFile — elenco file\n\n"+files.map(f=>f.name+"\t"+kind(f.name)+"\t"+size(f.size)+"\t"+(f.webkitRelativePath||"")).join("\n")],{type:"text/plain;charset=utf-8"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="ordinafile-elenco.txt";a.click();URL.revokeObjectURL(url);say("Elenco scaricato.")};
 $("drop").ondragover=e=>{e.preventDefault();$("drop").style.background="#eef3ff"};$("drop").ondragleave=()=>{$("drop").style.background="#fafbfe"};$("drop").ondrop=e=>{e.preventDefault();$("drop").style.background="#fafbfe";add(e.dataTransfer.files)};
 document.querySelectorAll(".nav").forEach(b=>b.onclick=()=>{document.querySelectorAll(".nav").forEach(x=>x.classList.remove("active"));b.classList.add("active");let v=b.dataset.view;if(v==="archive"){ $("listTitle").textContent="Archivio sessione";$("search").placeholder="Filtra archivio";let old=$("search").value;$("list").innerHTML="";archive.forEach(n=>{let d=document.createElement("div");d.className="result";d.textContent=n;$("list").append(d)});say("Archivio temporaneo della sessione: "+archive.length+" nomi.");}else{$("listTitle").textContent=v==="search"?"Cerca file":"File selezionati";render();if(v==="search")$("search").focus()}});
 </script>
 </body>
 </html>
+
+<style>
+#download.primary {
+  background: #000 !important;
+  color: #fff !important;
+  border-color: #000 !important;
+}
+#download.primary:hover {
+  background: #222 !important;
+  color: #fff !important;
+}
+</style>
